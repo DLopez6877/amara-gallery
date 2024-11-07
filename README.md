@@ -1,6 +1,6 @@
-# StarCanvas
+# Amara Gallery
 
-StarCanvas is an interactive 3D visualization built using Three.js, OrbitControls, and GSAP, designed to create an immersive experience with custom animations and scene interactions. The project displays a 3D canvas containing a textured planet, glowing stars that animate in various patterns, and an animated camera that moves smoothly between predefined positions. Users can also trigger transitions, disable controls, and adjust the scene using a modular and maintainable codebase.
+Amara Gallery is an interactive 3D visualization built using Three.js, OrbitControls, and GSAP, designed to create an immersive experience with custom animations and scene interactions. The project displays a 3D canvas containing a textured planet, glowing stars that animate in various patterns, and an animated camera that moves smoothly between predefined positions. Users can also trigger transitions, disable controls, and adjust the scene using a modular and maintainable codebase.
 
 ## Features
 
