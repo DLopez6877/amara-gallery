@@ -8,12 +8,14 @@ import { Draggable } from "gsap/Draggable";
 gsap.registerPlugin(Draggable);
 
 const starCanvasElement = StarCanvas();
-// document.querySelector("#app").prepend(starCanvasElement);
+document.querySelector("#app").prepend(starCanvasElement);
+// document.querySelector("#app").appendChild(LoadingHeader());
 
 document.body.style.backgroundColor = "#898683";
 const enterButton = EnterButton(() => {
   if (typeof starCanvasElement.enter === "function") {
     starCanvasElement.enter().then(() => {
+      document.querySelector("#app").appendChild(LoadingHeader());
       document.body.style.backgroundColor = "#898683";
       starCanvasElement.cleanup();
       starCanvasElement.remove();
@@ -21,4 +23,3 @@ const enterButton = EnterButton(() => {
   }
 });
 document.querySelector("#app").appendChild(enterButton);
-document.querySelector("#app").appendChild(LoadingHeader());

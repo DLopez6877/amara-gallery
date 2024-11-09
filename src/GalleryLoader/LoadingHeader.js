@@ -1,5 +1,5 @@
 import styles from "../../styles/GalleryLoader.module.scss";
-import welcomeHeaderImg from "/welcome_header.png";
+import welcomeImg from "/welcome_header.png";
 import { LoadingHeaderComponent } from "./LoadingHeaderComponent";
 import { ImageComponent } from "./ImageComponent";
 
@@ -25,76 +25,108 @@ const loadingHeaderSvgContent = `
 </svg>
 `;
 
+function createLoadingHeader(svgContent, className) {
+  return LoadingHeaderComponent({ svgContent, className });
+}
+
+function createWelcome(index, src) {
+  const container = document.createElement("div");
+  container.className = styles[`welcomeContainer${index}`];
+
+  const className = `welcome${index}`;
+  const alt = "Welcome banner.";
+  const image = ImageComponent({ src, alt, className });
+
+  container.append(image);
+  return { container, image };
+}
+
+function applyPathStyles(paths, index) {
+  paths.forEach((path, i, array) => {
+    const length = path.getTotalLength();
+    Object.assign(path.style, {
+      stroke: "white",
+      strokeWidth: "1",
+      strokeDasharray: length,
+      strokeDashoffset: length,
+      transition: `transform 0.75s 3.8s ease-in, fill-opacity 1s ease-out ${
+        (array.length - 1 - i) * 0.3 + 1
+      }s, stroke-dashoffset 1s ease ${(array.length - 1 - i) * 0.3}s`,
+    });
+
+    setTimeout(() => {
+      path.style.fillOpacity = "1";
+      path.style.strokeDashoffset = "0";
+    }, 100);
+
+    setTimeout(() => {
+      path.style.transform =
+        index % 2 === 0 ? "translateY(100%)" : "translateY(-100%)";
+    }, 5000);
+  });
+}
+
 export function LoadingHeader() {
   const container = document.createElement("div");
   container.className = styles.loadingHeaderContainer;
 
-  const loadingHeader = LoadingHeaderComponent({
-    svgContent: loadingHeaderSvgContent,
-    className: styles.loadingHeader,
-  });
-  const loadingHeader2 = LoadingHeaderComponent({
-    svgContent: loadingHeaderSvgContent,
-    className: styles.loadingHeader2,
-  });
-  container.append(loadingHeader, loadingHeader2);
+  const loadingHeader = createLoadingHeader(
+    loadingHeaderSvgContent,
+    styles.loadingHeader
+  );
+  const loadingHeader2 = createLoadingHeader(
+    loadingHeaderSvgContent,
+    styles.loadingHeader2
+  );
 
-  const image = ImageComponent({
-    src: welcomeHeaderImg,
-    alt: "Text: Welcome",
-    className: styles.welcomeHeader,
+  const welcomeContainers = [];
+
+  Array.from({ length: 3 }, (_, index) => {
+    const suffix = index + 1;
+    const { container } = createWelcome(suffix, welcomeImg);
+    welcomeContainers.push(container);
   });
-  const image2 = ImageComponent({
-    src: welcomeHeaderImg,
-    alt: "Hidden Text: Welcome",
-    className: styles.welcomeHeader2,
-  });
-  container.append(image, image2);
+
+  welcomeContainers.forEach((welcomeContainer) =>
+    container.append(welcomeContainer)
+  );
 
   const underline = document.createElement("div");
   underline.className = styles.loadingHeaderUnderline;
+
+  container.append(loadingHeader, loadingHeader2);
   container.append(underline);
 
-  const loadingHeaderPaths = loadingHeader.querySelectorAll("path");
-  const loadingHeader2Paths = loadingHeader2.querySelectorAll("path");
-  for (let i = loadingHeaderPaths.length - 1; i >= 0; i--) {
-    const path = loadingHeaderPaths[i];
-    const path2 = loadingHeader2Paths[i];
-    const length = path.getTotalLength();
-    path.style.stroke = "white";
-    path.style.strokeWidth = "1";
-    path.style.fill = "transparent";
-    path.style.strokeDasharray = length;
-    path.style.strokeDashoffset = length;
-    path2.style.stroke = "white";
-    path2.style.strokeWidth = "1";
-    path2.style.fill = "transparent";
-    path2.style.strokeDasharray = length;
-    path2.style.strokeDashoffset = length;
-
-    path.style.transition = `transform 0.75s 3.3s ease-in, fill 1s ease, stroke-dashoffset 1s ease ${
-      (loadingHeaderPaths.length - 1 - i) * 0.3
-    }s`;
-    path2.style.transition = `transform 0.75s 3.3s ease-in, fill 1s ease, stroke-dashoffset 1s ease ${
-      (loadingHeaderPaths.length - 1 - i) * 0.3
-    }s`;
-
-    setTimeout(() => {
-      path.style.strokeDashoffset = "0";
-      path2.style.strokeDashoffset = "0";
-    }, 100);
-
-    setTimeout(() => {
-      path.style.fill = "white";
-      path2.style.fill = "white";
-      path.style.transform = "translateY(100%)";
-      path2.style.transform = "translateY(-100%)";
-    }, 5000);
-  }
+  let index = 0;
+  [loadingHeader, loadingHeader2].forEach((header) => {
+    const paths = header.querySelectorAll("path");
+    applyPathStyles(paths, index);
+    index++;
+  });
 
   setTimeout(() => {
     underline.style.display = "block";
-  }, 7000);
+  }, 7200);
+
+  setTimeout(() => {
+    welcomeContainers.forEach((welcomeContainer, i) => {
+      const welcome = welcomeContainer.querySelector('[class*="welcome"]');
+      if (i === 0) {
+        welcome.style.transform = "translateY(18px)";
+      }
+      if (i === 1) {
+        welcome.style.transform = "translateY(-43px)";
+      }
+      if (i === 2) {
+        welcome.style.opacity = "1";
+      }
+    });
+  }, 10000);
+
+  setTimeout(() => {
+    welcomeContainers[0].style.display = "none";
+    welcomeContainers[1].style.display = "none";
+  }, 12000);
 
   return container;
 }

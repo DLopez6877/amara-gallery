@@ -1,6 +1,8 @@
+import styles from "../../styles/GalleryLoader.module.scss";
+
 export function LoadingHeaderComponent({ svgContent, className }) {
   const loadingHeader = document.createElement("div");
   loadingHeader.innerHTML = svgContent;
-  loadingHeader.className = className;
+  loadingHeader.className = styles[className] || className;
   return loadingHeader;
 }

@@ -5,11 +5,11 @@ import amaraImg from "/amara.jpg";
 import { createGlowTexture } from "./createGlowTexture.js";
 import StarPositionGenerator from "./StarPositionGenerator.js";
 import gsap from "gsap";
+import { delay } from "../Helpers.js";
 
 export function StarCanvas() {
   const container = document.createElement("div");
   const canvas = createCanvas();
-  const containerPadding = 16;
   container.appendChild(canvas);
 
   const { scene, camera, renderer } = initializeScene(canvas);
@@ -42,7 +42,10 @@ export function StarCanvas() {
       setTimeout(async () => {
         rotateCamera(-2.08, 1.53, 2.08);
         await moveCamera(759.75, 7.74, -4.67);
-        await moveCamera(12.55, 0.13, -0.08);
+        await moveCamera(12.55, 0.13, 5);
+        canvas.style.transition = "opacity 2.5s ease-out";
+        canvas.style.opacity = 0;
+        await delay(3000);
         resolve();
       }, 400);
     });
@@ -53,10 +56,7 @@ export function StarCanvas() {
   function handleResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(
-      window.innerWidth - containerPadding,
-      window.innerHeight - containerPadding
-    );
+    renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   // function handleCanvasClick() {
@@ -176,10 +176,7 @@ export function StarCanvas() {
     );
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(
-      window.innerWidth - containerPadding,
-      window.innerHeight - containerPadding
-    );
+    renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.setZ(30);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);

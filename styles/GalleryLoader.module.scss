@@ -22,43 +22,88 @@
     height: 100%;
     overflow: hidden;
     padding: 5px;
-    // border: 1px solid rebeccapurple;
     svg {
       height: auto;
+      path {
+        fill-opacity: 0;
+      }
     }
   }
   .loadingHeader {
     top: 0;
     overflow: hidden;
     height: 66%;
-    svg path {
+    // border: 2px solid black;
+    svg path,
+    .welcome1 {
       transform: translateY(18%);
     }
     @media (min-width: 650px) {
       height: 70%;
-      svg path {
-        transform: translateY(31%);
+      svg path,
+      .welcome1 {
+        transform: translateY(30%);
       }
     }
   }
   .loadingHeader2 {
     bottom: 0;
     height: 35%;
-    svg path {
+    // border: 2px solid rgb(111, 0, 255);
+    svg path,
+    .welcome2 {
       transform: translateY(-33.5%);
     }
     @media (min-width: 650px) {
       height: 30%;
-      svg path {
+      svg path,
+      .welcome2 {
         transform: translateY(-38%);
       }
     }
   }
 
-  .welcomeHeader,
-  .welcomeHeader2 {
-    width: 100%;
-    display: none;
+  .welcomeContainer1,
+  .welcomeContainer2,
+  .welcomeContainer3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 550px;
+    height: 121px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .welcome1,
+  .welcome2,
+  .welcome3 {
+    position: absolute;
+    height: 120px;
+    padding: 10px 10px 0 0;
+    transition: transform 1.3s ease, opacity 0.1s 1.4s;
+  }
+
+  .welcomeContainer1 {
+    height: 85px;
+    .welcome1 {
+      transform: translateY(101px);
+    }
+  }
+  .welcomeContainer2 {
+    height: 36px;
+    top: 85px;
+    .welcome2 {
+      transform: translateY(-70px);
+    }
+  }
+
+  .welcome3 {
+    opacity: 0;
+    transition: opacity 0s 1.3s;
   }
 
   .loadingHeaderUnderline {
@@ -70,7 +115,7 @@
     height: 2px;
     background-color: white;
     display: none;
-    animation: underlineInOut 4s forwards;
+    animation: underlineInOut 5.6s forwards;
     @media (min-width: 650px) {
       top: 70%;
     }
@@ -78,14 +123,17 @@
 
   @keyframes underlineInOut {
     0% {
-      clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
+      height: 30px;
+      clip-path: polygon(0% 0%, 0% 0%, 100% 100%, 100% 100%);
     }
-    50%,
+    25%,
     75% {
+      height: 2px;
       clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     }
     100% {
-      clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
+      height: 20px;
+      clip-path: polygon(0% 90%, 100% 90%, 100% 100%, 0% 100%);
     }
   }
 }

@@ -1,7 +1,9 @@
+import styles from "../../styles/GalleryLoader.module.scss";
+
 export function ImageComponent({ src, alt, className }) {
   const image = document.createElement("img");
   image.src = src;
   image.alt = alt;
-  image.className = className;
+  image.className = styles[className] || className;
   return image;
 }
