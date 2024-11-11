@@ -1,0 +1,10 @@
+.gallerySceneContainer {
+  height: 100svh;
+  width: 100svw;
+
+  .sceneCanvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}

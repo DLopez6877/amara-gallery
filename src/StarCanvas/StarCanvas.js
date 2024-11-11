@@ -10,6 +10,8 @@ import { delay } from "../Helpers.js";
 export function StarCanvas() {
   const container = document.createElement("div");
   const canvas = createCanvas();
+  canvas.style.border = "8px solid white";
+  canvas.style.position = "fixed";
   container.appendChild(canvas);
 
   const { scene, camera, renderer } = initializeScene(canvas);
@@ -43,9 +45,9 @@ export function StarCanvas() {
         rotateCamera(-2.08, 1.53, 2.08);
         await moveCamera(759.75, 7.74, -4.67);
         await moveCamera(12.55, 0.13, 5);
-        canvas.style.transition = "opacity 2.5s ease-out";
+        canvas.style.transition = "opacity 0.5s ease-out";
         canvas.style.opacity = 0;
-        await delay(3000);
+        await delay(1000);
         resolve();
       }, 400);
     });

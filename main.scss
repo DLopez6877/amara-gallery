@@ -1,0 +1,16 @@
+*,
+* *,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #898683;
+}
+
+// canvas:not(.sceneCanvas) {
+//   position: fixed;
+//   border: 8px solid white;
+// }
