@@ -6,10 +6,11 @@ import { createGlowTexture } from "./createGlowTexture.js";
 import StarPositionGenerator from "./StarPositionGenerator.js";
 import gsap from "gsap";
 import { delay } from "../Helpers.js";
+import vars from "../../vars.js";
 
 export function StarCanvas() {
   const container = document.createElement("div");
-  const canvas = createCanvas();
+  const canvas = document.createElement("canvas");
   canvas.style.border = "8px solid white";
   canvas.style.position = "fixed";
   container.appendChild(canvas);
@@ -18,11 +19,10 @@ export function StarCanvas() {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.mouseButtons.RIGHT = null;
   controls.minDistance = 20;
-  controls.maxDistance = 520;
+  controls.maxDistance = 650;
   const planetMesh = createPlanet(scene);
   const stars = createStars(scene);
 
-  let isSpinning = false;
   let isAnimatingTransition = false;
   let transitionStartTime = 0;
   let transitionDuration = 0;
@@ -30,26 +30,39 @@ export function StarCanvas() {
   let targetPositions = [];
   let onTransitionComplete = null;
 
-  container.spinStars = () => {
-    isSpinning = true;
+  const animateToPosition = (generatorFunction, ...args) => {
+    return new Promise((resolve) => {
+      isAnimatingTransition = true;
+      transitionStartTime = performance.now();
+      transitionDuration = 3000;
+      initialPositions = stars.geometry.attributes.position.array.slice();
+      targetPositions = generatorFunction(initialPositions.length / 3, ...args);
+
+      onTransitionComplete = () => {
+        isAnimatingTransition = false;
+        resolve();
+      };
+    });
   };
+
+  for (const [key, func] of Object.entries(StarPositionGenerator)) {
+    container[key] = (...args) => animateToPosition(func, ...args);
+  }
 
   container.enter = async function () {
     return new Promise(async (resolve) => {
       controls.minDistance = 0;
       controls.enabled = false;
       await moveCamera(0, 0, 420);
-      await startAnimateStars();
+      await container.sineWave(20, 30, 0.02, 0.015, 4);
 
-      setTimeout(async () => {
-        rotateCamera(-2.08, 1.53, 2.08);
-        await moveCamera(759.75, 7.74, -4.67);
-        await moveCamera(12.55, 0.13, 5);
-        canvas.style.transition = "opacity 0.5s ease-out";
-        canvas.style.opacity = 0;
-        await delay(1000);
-        resolve();
-      }, 400);
+      rotateCamera(-2.08, 1.53, 2.08);
+      await moveCamera(759.75, 7.74, -4.67);
+      await moveCamera(12.55, 0.13, 5);
+      canvas.style.transition = "opacity 0.5s ease-out";
+      canvas.style.opacity = 0;
+      await delay(1000);
+      resolve();
     });
   };
 
@@ -61,21 +74,8 @@ export function StarCanvas() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  // function handleCanvasClick() {
-  //   console.log(`${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(
-  //     2
-  //   )}, ${camera.position.z.toFixed(2)}
-  //   ${camera.rotation.x.toFixed(2)}, ${camera.rotation.y.toFixed(
-  //     2
-  //   )}, ${camera.rotation.z.toFixed(2)}
-  //   `);
-  // }
-
-  // canvas.addEventListener("click", handleCanvasClick);
-
   container.cleanup = () => {
     window.removeEventListener("resize", handleResize);
-    // canvas.removeEventListener("click", handleCanvasClick);
   };
 
   animateMainLoop();
@@ -85,14 +85,11 @@ export function StarCanvas() {
   function animateMainLoop() {
     function animate() {
       requestAnimationFrame(animate);
-
-      planetMesh.rotation.y -= 0.0002;
-      planetMesh.rotation.x += 0.0005;
+      planetMesh.rotation.y -= 0.0004;
+      planetMesh.rotation.x += 0.0006;
 
       if (isAnimatingTransition) {
         animateTransition();
-      } else if (isSpinning) {
-        rotateStars(stars.geometry, 0.01);
       }
 
       controls.update();
@@ -100,28 +97,6 @@ export function StarCanvas() {
     }
 
     animate();
-  }
-
-  function startAnimateStars() {
-    return new Promise((resolve) => {
-      isAnimatingTransition = true;
-      transitionStartTime = performance.now();
-      transitionDuration = 3000;
-      initialPositions = stars.geometry.attributes.position.array.slice();
-      targetPositions = StarPositionGenerator.sineWave(
-        initialPositions.length / 3,
-        20,
-        30,
-        0.02,
-        0.015,
-        4
-      );
-
-      onTransitionComplete = () => {
-        isAnimatingTransition = false;
-        resolve();
-      };
-    });
   }
 
   function animateTransition() {
@@ -146,28 +121,6 @@ export function StarCanvas() {
     }
   }
 
-  function rotateStars(geometry, angleIncrement) {
-    const currentPositions = geometry.attributes.position.array;
-
-    for (let i = 0; i < currentPositions.length; i += 3) {
-      const x = currentPositions[i];
-      const y = currentPositions[i + 1];
-      const newX = x * Math.cos(angleIncrement) - y * Math.sin(angleIncrement);
-      const newY = x * Math.sin(angleIncrement) + y * Math.cos(angleIncrement);
-
-      currentPositions[i] = newX;
-      currentPositions[i + 1] = newY;
-    }
-
-    geometry.attributes.position.needsUpdate = true;
-  }
-
-  function createCanvas() {
-    const canvas = document.createElement("canvas");
-    canvas.id = "scene";
-    return canvas;
-  }
-
   function initializeScene(canvas) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -179,7 +132,7 @@ export function StarCanvas() {
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.position.setZ(30);
+    camera.position.setZ(200);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
@@ -203,14 +156,17 @@ export function StarCanvas() {
   }
 
   function createStars(scene) {
-    const numStars = 750;
+    const numStars = vars.NUMBER_OF_STARS;
     const starGeometry = new THREE.BufferGeometry();
     const glowTexture = createGlowTexture();
+
     const starMaterial = new THREE.PointsMaterial({
       color: 0xfefee4,
       size: 5.5,
       map: glowTexture,
       transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
     });
 
     const initialPositions = StarPositionGenerator.random(numStars, 150, 520);

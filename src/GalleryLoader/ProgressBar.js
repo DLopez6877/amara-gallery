@@ -16,7 +16,7 @@ export function ProgressBar(durationMS) {
   const duration = durationMS;
   const interval = 100;
 
-  const increment = (100 / durationMS) * interval; // Calculate progress increment per interval
+  const increment = (100 / durationMS) * interval;
 
   const progressInterval = setInterval(() => {
     progress += increment;

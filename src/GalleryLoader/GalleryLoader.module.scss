@@ -160,4 +160,48 @@
     color: #000;
     font-weight: bold;
   }
+
+  @media (max-width: 650px) {
+    .welcome1,
+    .welcome2 {
+      display: none;
+    }
+    .welcome3 {
+      width: 275px;
+      height: 60px;
+      top: 0;
+      left: 0;
+      transform: none;
+      transition-delay: 2.5s;
+    }
+    // .welcomeContainer1 {
+    //   height: 42px;
+    //   width: 275px;
+    //   .welcome1 {
+    //     transform: translateY(9px);
+    //     width: 275px;
+    //     height: 60px;
+    //     padding: 0;
+    //   }
+    // }
+    // .welcomeContainer2 {
+    //   height: 18px;
+    //   top: 42px;
+    //   width: 275px;
+    //   .welcome2 {
+    //     transform: translateY(-21px);
+    //     width: 275px;
+    //     height: 60px;
+    //     padding: 0;
+    //   }
+    // }
+    // .welcomeContainer3 {
+    //   height: 60px;
+    //   width: 275px;
+    //   .welcome3 {
+    //     width: 275px;
+    //     height: 60px;
+    //   }
+    // }
+  }
 }

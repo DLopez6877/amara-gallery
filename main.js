@@ -1,40 +1,31 @@
 import { StarCanvas } from "./src/StarCanvas/StarCanvas.js";
 import { EnterButton } from "./src/EnterButton/EnterButton.js";
 import { GalleryLoader } from "./src/GalleryLoader/GalleryLoader.js";
-import { GalleryScene } from "./src/GalleryScene/GalleryScene.js";
+import { StarButtons } from "./src/StarButtons/StarButtons.js";
 import "./main.scss";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
+import starPositions from "./starPositions.js";
 
 gsap.registerPlugin(Draggable);
+
 const starCanvasElement = StarCanvas();
-const galleryPositions = GalleryScene({
-  // cameraPositions: [
-  //   { posX: 0, posY: 5, posZ: 15, rotateX: 0, rotateY: 0, rotateZ: 0 },
-  //   {
-  //     posX: 10,
-  //     posY: 5,
-  //     posZ: 10,
-  //     rotateX: 0,
-  //     rotateY: Math.PI / 4,
-  //     rotateZ: 0,
-  //   },
-  //   // Add more camera positions as needed
-  // ],
-});
+document.querySelector("#app").prepend(starCanvasElement);
+const starButtons = StarButtons(starPositions, starCanvasElement);
+document.querySelector("#app").appendChild(starButtons);
 
 const enterButton = EnterButton(() => {
   if (typeof starCanvasElement.enter === "function") {
+    enterButton.style.opacity = "0";
+    starButtons.style.opacity = "0";
+    enterButton.style.pointerEvents = "none";
+    starButtons.style.pointerEvents = "none";
     starCanvasElement.enter().then(() => {
-      document
-        .querySelector("#app")
-        .appendChild(GalleryScene(galleryPositions));
+      document.querySelector("#app");
+      document.querySelector("#app").appendChild(GalleryLoader());
       starCanvasElement.cleanup();
       starCanvasElement.remove();
     });
   }
 });
-
-// document.querySelector("#app").prepend(starCanvasElement);
-document.querySelector("#app").appendChild(GalleryLoader());
-// document.querySelector("#app").appendChild(enterButton);
+document.querySelector("#app").appendChild(enterButton);

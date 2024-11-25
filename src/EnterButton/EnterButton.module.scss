@@ -1,7 +1,7 @@
 .enterButton {
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
   z-index: 1;
   color: white;
   background-color: transparent;
@@ -10,7 +10,8 @@
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: 0.3s ease-in;
+  opacity: 1;
 
   &:hover {
     background-color: white;

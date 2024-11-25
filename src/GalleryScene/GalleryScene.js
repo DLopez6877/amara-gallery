@@ -72,8 +72,8 @@ export function GalleryScene({ cameraPositions }) {
     if (!cameraPositions) {
       camera.position.set(17.89, 8.81, -15.75);
       camera.rotation.set(-1.58, 1.0, 1.58);
-      moveCamera(-7.31, 7.16, -25.7);
-      rotateCamera(-1.73, -1.54, -1.73);
+      moveCamera(5.98, 2.39, -17.78);
+      rotateCamera(5.98, 2.39, -17.78);
       controls.enableDamping = true;
       controls.dampingFactor = 0.5;
       controls.enableZoom = true;

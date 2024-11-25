@@ -1,8 +1,8 @@
-import welcomeImg from "/welcome_header.png";
+import welcomeImg from "/soon_header.png";
 import styles from "./GalleryLoader.module.scss";
 import { LoadingHeaderComponent } from "./LoadingHeaderComponent";
 import { ImageComponent } from "./ImageComponent";
-import { ProgressBar } from "./ProgressBar.js";
+import { GalleryScene } from "../GalleryScene/GalleryScene";
 
 const loadingHeaderSvgContent = `
 <svg width="396" height="88" viewBox="0 0 396 88" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,9 +106,6 @@ export function GalleryLoader() {
     index++;
   });
 
-  const progressBar = ProgressBar(7200);
-  // container.appendChild(progressBar);
-
   setTimeout(() => {
     underline.style.display = "block";
   }, 7200);
@@ -131,6 +128,8 @@ export function GalleryLoader() {
   setTimeout(() => {
     welcomeContainers[0].style.display = "none";
     welcomeContainers[1].style.display = "none";
+    const gallery = GalleryScene();
+    document.querySelector("#app").appendChild(gallery);
   }, 12000);
 
   return container;

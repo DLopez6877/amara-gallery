@@ -4,7 +4,7 @@ export function EnterButton(onClickHandler) {
   const button = document.createElement("button");
   button.id = "enterButton";
   button.className = styles.enterButton;
-  button.textContent = "Enter";
+  button.textContent = "← Gallery";
 
   button.addEventListener("click", onClickHandler);
 

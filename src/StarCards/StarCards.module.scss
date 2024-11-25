@@ -1,0 +1,54 @@
+.cardsContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  display: none;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  background-color: #fff;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card.hidden {
+  display: none;
+}
+
+.card:not(.hidden) {
+  display: block;
+}
+
+.minimizeButton,
+.maximizeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.minimizeButton:hover,
+.maximizeButton:hover {
+  background-color: white;
+  color: transparent;
+}
+
+.hidden {
+  display: none;
+}
